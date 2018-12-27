@@ -1,5 +1,5 @@
 import * as express from "express";
-import ThermostaApi from "./api/v1/thermostat-api";
+import { Server } from "./server/Server";
 import { MQTTController } from "./mqtt/mqtt-controller";
 import { CronController } from "./cron/cron-controller";
 import { Logger } from "./logger";
@@ -23,21 +23,7 @@ class App {
   }
 
   private startServer() {
-    this.logger.info("Starting Server");
-    this.mountRoutes();
-    const port = process.env.PORT || 3000;
-    this.express.listen(port, (err: any) => {
-      if (err) {
-        return console.log(err);
-      }
-      return console.log(`server is listening on ${port}`);
-    });
-  }
-
-  private mountRoutes(): void {
-    const router = express.Router();
-    router.use("/api/v1/", ThermostaApi);
-    this.express.use("/", router);
+    Server.bootstrap();
   }
 
   private startMqtt(): void {

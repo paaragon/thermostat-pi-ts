@@ -29,7 +29,7 @@ class ThermostatController {
   }
 
   public currentTemp(): number {
-    this._updateCurrentTemp();
+    this.updateCurrentTemp();
     return this.thermostat.currentTemp;
   }
 
@@ -48,7 +48,7 @@ class ThermostatController {
   public async regulateThermostat(): Promise<any> {
     if (this.thermostat.on === true) {
       // 1.- updateCurrentTemp
-      this._updateCurrentTemp();
+      this.updateCurrentTemp();
       // 2.- get temp dif between current temp and temp set
       const tempDiff = this.thermostat.tempSet - this.thermostat.currentTemp;
       // 3.- calculate dc motor movement
@@ -60,7 +60,7 @@ class ThermostatController {
     }
   }
 
-  private async _updateCurrentTemp(): Promise<any> {
+  public async updateCurrentTemp(): Promise<any> {
     // blink led in blue
     const interval = await this._blinkLed(500, "#0000FF");
     // get temp lecture
