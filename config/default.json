@@ -1,0 +1,26 @@
+{
+  "raspmodules": {
+    "dcmotor": {
+      "pin": 0,
+      "timemoveratio": 1
+    },
+    "dht22": {
+      "pin": 0
+    },
+    "rgbled": {
+      "pinR": 0,
+      "pinG": 0,
+      "pinB": 0
+    }
+  },
+  "cron": {
+    "expression": "* * * * * *"
+  },
+  "mqtt": {
+    "url": "",
+    "username": "",
+    "password": "",
+    "channel": "",
+    "qos": ""
+  }
+}
