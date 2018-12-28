@@ -10,16 +10,16 @@ export class RaspberryModulescontroller {
   private rgbLed: RGBLed;
 
   private constructor() {
-    const dht22Pin: number = config.get("raspmodules.dht22.pin");
+    const dht22Pin: number = config.get<number>("raspmodules.dht22.pin");
     this.dht22 = new DHT22(dht22Pin);
 
-    const dcMotorPin: number = config.get("raspmodules.dcmotor.pin");
+    const dcMotorPin: number = config.get<number>("raspmodules.dcmotor.pin");
     this.dcMotor = new DCMotor(dcMotorPin);
 
     const rgbLedPin: { red: number; green: number; blue: number } = {
-      red: config.get("raspmodules.rgbled.pinR"),
-      green: config.get("raspmodules.rgbled.pinG"),
-      blue: config.get("raspmodules.rgbled.pinB")
+      red: config.get<number>("raspmodules.rgbled.pinR"),
+      green: config.get<number>("raspmodules.rgbled.pinG"),
+      blue: config.get<number>("raspmodules.rgbled.pinB")
     };
     this.rgbLed = new RGBLed(rgbLedPin.red, rgbLedPin.green, rgbLedPin.blue);
   }

@@ -6,7 +6,7 @@ export class CronController {
   private static _instance: CronController;
 
   private thermostatController: ThermostatController;
-  private cronExpression: string = config.get("cron.expression");
+  private cronExpression: string = config.get<string>("cron.expression");
   private task: any;
 
   private constructor() {

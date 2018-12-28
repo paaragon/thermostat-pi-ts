@@ -4,11 +4,11 @@ import config = require("config");
 
 export class MQTTService {
   private client: MqttClient;
-  private url: string = config.get("mqtt.url");
-  private channel: string = config.get("mqtt.channel");
-  private username: string = config.get("mqtt.username");
-  private password: string = config.get("mqtt.password");
-  private quos: mqtt.QoS = config.get("mqtt.qos");
+  private url: string = config.get<string>("mqtt.url");
+  private channel: string = config.get<string>("mqtt.channel");
+  private username: string = config.get<string>("mqtt.username");
+  private password: string = config.get<string>("mqtt.password");
+  private quos: mqtt.QoS = config.get<mqtt.QoS>("mqtt.qos");
 
   constructor() {}
 

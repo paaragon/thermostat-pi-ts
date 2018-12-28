@@ -7,7 +7,7 @@ class ThermostatController {
   private raspberryModulesController: RaspberryModulescontroller;
   private thermostat: Thermostat;
 
-  private _timeMoveRatio: number = config.get(
+  private _timeMoveRatio: number = config.get<number>(
     "raspmodules.dcmotor.timemoveratio"
   );
 

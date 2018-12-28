@@ -1,9 +1,9 @@
 export enum ActionsEnum {
-  SET_TEMP = "settemp",
-  INCREASE_TEMP = "increasetemp",
-  DECREASE_TEMP = "decreasetemp",
-  TURN_OFF = "turnoff",
-  TURN_ON = "turnon"
+  SET_TEMP,
+  INCREASE_TEMP,
+  DECREASE_TEMP,
+  TURN_OFF,
+  TURN_ON
 }
 export interface Action {
   actionName: ActionsEnum;
