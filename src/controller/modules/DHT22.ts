@@ -1,9 +1,11 @@
+import * as sensor from 'node-dht-sensor';
+
 export interface DHT22Lecture {
   temperature: number;
   humidity: number;
 }
 
-export class DHT22 {
+export default class DHT22 {
   private pin: number;
 
   constructor(pin) {
@@ -12,9 +14,14 @@ export class DHT22 {
 
   public async getLecture(): Promise<DHT22Lecture> {
     return new Promise<DHT22Lecture>((res, rej) => {
-      return res({
-        temperature: 0,
-        humidity: 0
+      sensor.read(22, this.pin, (err, temperature, humidity) => {
+        if (err) {
+          return rej(null);
+        }
+        return res({
+          temperature,
+          humidity,
+        });
       });
     });
   }

@@ -1,26 +1,26 @@
-import mqtt = require("mqtt");
-import { MqttClient } from "mqtt";
-import config = require("config");
+import { MqttClient } from 'mqtt';
 
-export class MQTTService {
+import mqtt = require('mqtt');
+import config = require('config');
+
+export default class MQTTService {
   private client: MqttClient;
-  private url: string = config.get<string>("mqtt.url");
-  private channel: string = config.get<string>("mqtt.channel");
-  private username: string = config.get<string>("mqtt.username");
-  private password: string = config.get<string>("mqtt.password");
-  private quos: mqtt.QoS = config.get<mqtt.QoS>("mqtt.qos");
-
-  constructor() {}
+  private url: string = config.get<string>('mqtt.url');
+  private channel: string = config.get<string>('mqtt.channel');
+  private username: string = config.get<string>('mqtt.username');
+  private password: string = config.get<string>('mqtt.password');
+  private quos: mqtt.QoS = config.get<mqtt.QoS>('mqtt.qos');
 
   public async connect(): Promise<any> {
     return new Promise((res, rej) => {
       this.client = mqtt.connect(
         this.url,
-        { username: this.username, password: this.password }
+        { username: this.username, password: this.password },
       );
-      this.client.on("connect", err => {
+      this.client.on('connect', (err) => {
         if (err) {
-          return rej(err);
+          rej(err);
+          return;
         }
         res();
       });
@@ -29,9 +29,10 @@ export class MQTTService {
 
   public async subscribe(): Promise<any> {
     return new Promise((res, rej) => {
-      this.client.subscribe(this.channel, function(err) {
+      this.client.subscribe(this.channel, (err) => {
         if (err) {
-          return rej(err);
+          rej(err);
+          return;
         }
         res();
       });
@@ -44,26 +45,27 @@ export class MQTTService {
         this.channel,
         payload,
         {
-          qos: this.quos
+          qos: this.quos,
         },
-        err => {
+        (err) => {
           if (err) {
-            return rej(err);
+            rej(err);
+            return;
           }
           res();
-        }
+        },
       );
     });
   }
 
   public onMessage(cb: Function) {
-    this.client.on("message", (topic, message) => {
+    this.client.on('message', (topic, message) => {
       cb(message);
     });
   }
 
   public async end(): Promise<any> {
-    return new Promise((res, rej) => {
+    return new Promise((res) => {
       this.client.end(false, () => {
         res();
       });

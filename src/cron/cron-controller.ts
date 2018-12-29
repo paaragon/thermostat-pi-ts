@@ -1,12 +1,13 @@
-import cron = require("node-cron");
-import ThermostatController from "../controller/thermostat-controller";
-import config = require("config");
+import ThermostatController from '../controller/thermostat-controller';
 
-export class CronController {
-  private static _instance: CronController;
+import cron = require('node-cron');
+import config = require('config');
+
+export default class CronController {
+  private static instance: CronController;
 
   private thermostatController: ThermostatController;
-  private cronExpression: string = config.get<string>("cron.expression");
+  private cronExpression: string = config.get<string>('cron.expression');
   private task: any;
 
   private constructor() {
@@ -17,12 +18,12 @@ export class CronController {
         this.thermostatController.regulateThermostat();
       },
       {
-        scheduled: false
-      }
+        scheduled: false,
+      },
     );
   }
   public static get Instance(): CronController {
-    return this._instance || (this._instance = new this());
+    return this.instance || (this.instance = new this());
   }
 
   public startCron() {

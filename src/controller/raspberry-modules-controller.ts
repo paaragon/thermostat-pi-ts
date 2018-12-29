@@ -1,31 +1,32 @@
-import { DHT22 } from "./modules/DHT22";
-import { DCMotor } from "./modules/DcMotor";
-import { RGBLed } from "./modules/rgbled";
-import config = require("config");
+import DHT22 from './modules/DHT22';
+import { DCMotor } from './modules/DcMotor';
+import RGBLed from './modules/rgbled';
 
-export class RaspberryModulescontroller {
-  private static _instance: RaspberryModulescontroller;
+import config = require('config');
+
+export default class RaspberryModulescontroller {
+  private static instance: RaspberryModulescontroller;
   private dht22: DHT22;
   private dcMotor: DCMotor;
   private rgbLed: RGBLed;
 
   private constructor() {
-    const dht22Pin: number = config.get<number>("raspmodules.dht22.pin");
+    const dht22Pin : number = config.get<number>('raspmodules.dht22.pin');
     this.dht22 = new DHT22(dht22Pin);
 
-    const dcMotorPin: number = config.get<number>("raspmodules.dcmotor.pin");
+    const dcMotorPin : number = config.get<number>('raspmodules.dcmotor.pin');
     this.dcMotor = new DCMotor(dcMotorPin);
 
-    const rgbLedPin: { red: number; green: number; blue: number } = {
-      red: config.get<number>("raspmodules.rgbled.pinR"),
-      green: config.get<number>("raspmodules.rgbled.pinG"),
-      blue: config.get<number>("raspmodules.rgbled.pinB")
+    const rgbLedPin : { red : number; green : number; blue : number } = {
+      red: config.get<number>('raspmodules.rgbled.pinR'),
+      green: config.get<number>('raspmodules.rgbled.pinG'),
+      blue: config.get<number>('raspmodules.rgbled.pinB'),
     };
     this.rgbLed = new RGBLed(rgbLedPin.red, rgbLedPin.green, rgbLedPin.blue);
   }
 
   public static get Instance(): RaspberryModulescontroller {
-    return this._instance || (this._instance = new this());
+    return this.instance || (this.instance = new this());
   }
 
   public moveMotor(time: number): Promise<any> {
@@ -33,8 +34,8 @@ export class RaspberryModulescontroller {
   }
 
   public async getTempLecture(): Promise<{
-    temperature: number;
-    humidity: number;
+  temperature: number;
+  humidity: number;
   }> {
     return this.dht22.getLecture();
   }

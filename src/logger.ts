@@ -1,44 +1,44 @@
-import winston = require("winston");
-import DailyRotateFile = require("winston-daily-rotate-file");
-import fs = require("fs");
-import path = require("path");
+import winston = require('winston');
+import DailyRotateFile = require('winston-daily-rotate-file');
+import fs = require('fs');
+import path = require('path');
 
-export class Logger {
+export default class Logger {
   private logger: winston.Logger;
   private filename: string;
 
   constructor(name: string) {
-    const logDir = "log";
+    const logDir = 'log';
     if (!fs.existsSync(logDir)) {
       fs.mkdirSync(logDir);
     }
     const filename = path.join(logDir, `${name}.log`);
     this.logger = winston.createLogger({
-      level: "debug",
+      level: 'debug',
       format: winston.format.combine(
         winston.format.timestamp({
-          format: "YYYY-MM-DD HH:mm:ss"
+          format: 'YYYY-MM-DD HH:mm:ss',
         }),
         winston.format.printf(
-          info => `${info.timestamp} ${info.level}: ${info.message}`
-        )
+          info => `${info.timestamp} ${info.level}: ${info.message}`,
+        ),
       ),
       transports: [
         new winston.transports.Console({
-          level: "info",
+          level: 'info',
           format: winston.format.combine(
             winston.format.colorize(),
             winston.format.printf(
-              info => `${info.timestamp} ${info.level}: ${info.message}`
-            )
-          )
+              info => `${info.timestamp} ${info.level}: ${info.message}`,
+            ),
+          ),
         }),
         new winston.transports.File({ filename }),
         new DailyRotateFile({
           filename: `${logDir}/%DATE%.log`,
-          datePattern: "YYYY-MM-DD"
-        })
-      ]
+          datePattern: 'YYYY-MM-DD',
+        }),
+      ],
     });
   }
 

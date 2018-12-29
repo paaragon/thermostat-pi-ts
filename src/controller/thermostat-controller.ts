@@ -1,14 +1,15 @@
-import { Thermostat } from "../model/Thermostat";
-import { RaspberryModulescontroller } from "./raspberry-modules-controller";
-import config = require("config");
+import Thermostat from '../model/Thermostat';
+import RaspberryModulescontroller from './raspberry-modules-controller';
 
-class ThermostatController {
-  private static _instance: ThermostatController;
+import config = require('config');
+
+export default class ThermostatController {
+  private static instance: ThermostatController;
   private raspberryModulesController: RaspberryModulescontroller;
   private thermostat: Thermostat;
 
-  private _timeMoveRatio: number = config.get<number>(
-    "raspmodules.dcmotor.timemoveratio"
+  private timeMoveRatio: number = config.get<number>(
+    'raspmodules.dcmotor.timemoveratio',
   );
 
   private constructor() {
@@ -17,7 +18,7 @@ class ThermostatController {
   }
 
   public static get Instance(): ThermostatController {
-    return this._instance || (this._instance = new this());
+    return this.instance || (this.instance = new this());
   }
 
   public turnThermostatOn() {
@@ -38,11 +39,11 @@ class ThermostatController {
   }
 
   public increateTemp(amount: number): void {
-    this.thermostat.tempSet++;
+    this.thermostat.tempSet += amount;
   }
 
   public decreaseTemp(amount: number): void {
-    this.thermostat.tempSet--;
+    this.thermostat.tempSet -= amount;
   }
 
   public async regulateThermostat(): Promise<any> {
@@ -52,26 +53,26 @@ class ThermostatController {
       // 2.- get temp dif between current temp and temp set
       const tempDiff = this.thermostat.tempSet - this.thermostat.currentTemp;
       // 3.- calculate dc motor movement
-      const moveTime = tempDiff * this._timeMoveRatio;
+      const moveTime = tempDiff * this.timeMoveRatio;
       // 4.- move dc motor
-      const interval = await this._blinkLed(500, "#FF00FF");
+      const interval = await this.blinkLed(500, '#FF00FF');
       await this.raspberryModulesController.moveMotor(moveTime);
-      await this._stopBlinkLed(interval);
+      await this.stopBlinkLed(interval);
     }
   }
 
   public async updateCurrentTemp(): Promise<any> {
     // blink led in blue
-    const interval = await this._blinkLed(500, "#0000FF");
+    const interval = await this.blinkLed(500, '#0000FF');
     // get temp lecture
     const lecture = await this.raspberryModulesController.getTempLecture();
     // stop blink led
-    await this._stopBlinkLed(interval);
+    await this.stopBlinkLed(interval);
     // if result is correct, led color is green. In other case, is red
     if (lecture.temperature) {
-      await this.raspberryModulesController.setLedColor("#00FF00");
+      await this.raspberryModulesController.setLedColor('#00FF00');
     } else {
-      await this.raspberryModulesController.setLedColor("#FF0000");
+      await this.raspberryModulesController.setLedColor('#FF0000');
     }
     // turn off led in 1 second
     setTimeout(async () => {
@@ -80,8 +81,11 @@ class ThermostatController {
     this.thermostat.currentTemp = lecture.temperature;
   }
 
-  private async _blinkLed(period: number, color?: string): Promise<any> {
+  private async blinkLed(period: number, color?: string): Promise<any> {
     let isOn = true;
+    if (color) {
+      this.raspberryModulesController.setLedColor(color);
+    }
     return setInterval(async () => {
       if (isOn) {
         await this.raspberryModulesController.turnLedOff();
@@ -93,10 +97,8 @@ class ThermostatController {
     }, 500);
   }
 
-  private async _stopBlinkLed(interval: any): Promise<any> {
+  private async stopBlinkLed(interval: any): Promise<any> {
     clearInterval(interval);
     await this.raspberryModulesController.turnLedOff();
   }
 }
-
-export default ThermostatController;

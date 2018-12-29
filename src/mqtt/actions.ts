@@ -30,14 +30,14 @@ export interface TurnOnAction extends Action {
   actionName: ActionsEnum.TURN_ON;
 }
 
-export class Actions {
+export default class Actions {
   public static parseAction(message: any): Action {
     if (!message || !message.actionName) {
       return {
         actionName: null,
         params: {},
         error: true,
-        errorMsg: "No se encuentra la accion"
+        errorMsg: 'No se encuentra la accion',
       };
     }
 
@@ -46,125 +46,125 @@ export class Actions {
         actionName: null,
         params: {},
         error: true,
-        errorMsg: "Acción no válida"
+        errorMsg: 'Acción no válida',
       };
     }
 
     switch (message.action) {
       case ActionsEnum.SET_TEMP:
-        return Actions._parseSetTemp(message);
+        return Actions.parseSetTemp(message);
       case ActionsEnum.INCREASE_TEMP:
-        return Actions._parseIncreaseTemp(message);
+        return Actions.parseIncreaseTemp(message);
       case ActionsEnum.DECREASE_TEMP:
-        return Actions._parseDecreaseTemp(message);
+        return Actions.parseDecreaseTemp(message);
       case ActionsEnum.TURN_OFF:
-        return Actions._parseTurnOff(message);
+        return Actions.parseTurnOff();
       case ActionsEnum.TURN_ON:
-        return Actions._parseTurnOn(message);
+        return Actions.parseTurnOn();
       default:
         return {
           actionName: null,
           params: {},
           error: true,
-          errorMsg: "Acción no válida"
+          errorMsg: 'Acción no válida',
         };
     }
   }
-  private static _parseSetTemp(message: any): SetTempAction {
-    if (!message.params || !("temp" in message.params)) {
+  private static parseSetTemp(message: any): SetTempAction {
+    if (!message.params || !('temp' in message.params)) {
       return {
         actionName: ActionsEnum.SET_TEMP,
         params: null,
         error: true,
-        errorMsg: "Faltan parámetros"
+        errorMsg: 'Faltan parámetros',
       };
     }
 
-    const temp = parseInt(message.params.temp);
+    const temp = parseInt(message.params.temp, 10);
     if (isNaN(temp)) {
       return {
         actionName: ActionsEnum.SET_TEMP,
         params: null,
         error: true,
-        errorMsg: "parametro temp no es un numero"
+        errorMsg: 'parametro temp no es un numero',
       };
     }
     return {
       actionName: ActionsEnum.SET_TEMP,
-      params: { temp: temp },
+      params: { temp },
       error: false,
-      errorMsg: null
+      errorMsg: null,
     };
   }
 
-  private static _parseIncreaseTemp(message: any): IncreaseTempAction {
-    if (!message.params || !("amount" in message.params)) {
+  private static parseIncreaseTemp(message: any): IncreaseTempAction {
+    if (!message.params || !('amount' in message.params)) {
       return {
         actionName: ActionsEnum.INCREASE_TEMP,
         params: null,
         error: true,
-        errorMsg: "Faltan parámetros"
+        errorMsg: 'Faltan parámetros',
       };
     }
-    const amount = parseInt(message.params.amount);
+    const amount = parseInt(message.params.amount, 10);
     if (isNaN(amount)) {
       return {
         actionName: ActionsEnum.INCREASE_TEMP,
         params: null,
         error: true,
-        errorMsg: "parametro amount no es un numero"
+        errorMsg: 'parametro amount no es un numero',
       };
     }
     return {
       actionName: ActionsEnum.INCREASE_TEMP,
-      params: { amount: amount },
+      params: { amount },
       error: false,
-      errorMsg: null
+      errorMsg: null,
     };
   }
 
-  private static _parseDecreaseTemp(message: any): DecreaseTempAction {
-    if (!message.params || !("amount" in message.params)) {
+  private static parseDecreaseTemp(message: any): DecreaseTempAction {
+    if (!message.params || !('amount' in message.params)) {
       return {
         actionName: ActionsEnum.DECREASE_TEMP,
         params: null,
         error: true,
-        errorMsg: "Faltan parámetros"
+        errorMsg: 'Faltan parámetros',
       };
     }
 
-    const amount = parseInt(message.params.amount);
+    const amount = parseInt(message.params.amount, 10);
     if (isNaN(amount)) {
       return {
         actionName: ActionsEnum.DECREASE_TEMP,
         params: null,
         error: true,
-        errorMsg: "parametro amount no es un numero"
+        errorMsg: 'parametro amount no es un numero',
       };
     }
     return {
       actionName: ActionsEnum.DECREASE_TEMP,
-      params: { amount: amount },
+      params: { amount },
       error: false,
-      errorMsg: null
+      errorMsg: null,
     };
   }
 
-  private static _parseTurnOff(message: any): TurnOffAction {
+  private static parseTurnOff(): TurnOffAction {
     return {
       actionName: ActionsEnum.TURN_OFF,
       params: null,
       error: false,
-      errorMsg: null
+      errorMsg: null,
     };
   }
 
-  private static _parseTurnOn(message: any): TurnOnAction {
+  private static parseTurnOn(): TurnOnAction {
     return {
       actionName: ActionsEnum.TURN_ON,
       params: null,
       error: false,
-      errorMsg: null
+      errorMsg: null,
     };
   }
 }

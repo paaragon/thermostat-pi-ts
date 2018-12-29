@@ -1,5 +1,5 @@
-export class Thermostat {
-  private static _instance: Thermostat;
+export default class Thermostat {
+  private static instance: Thermostat;
 
   public currentTemp: number;
   public tempSet: number;
@@ -12,14 +12,14 @@ export class Thermostat {
   }
 
   public static get Instance(): Thermostat {
-    return this._instance || (this._instance = new this());
+    return this.instance || (this.instance = new this());
   }
 
   public toJSON() {
     return {
       currentTemp: this.currentTemp,
       tempSet: this.tempSet,
-      on: this.on
+      on: this.on,
     };
   }
 }
