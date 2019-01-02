@@ -1,5 +1,5 @@
 import DHT22 from './modules/DHT22';
-import { DCMotor } from './modules/DcMotor';
+import DCMotor from './modules/DCMotor';
 import RGBLed from './modules/rgbled';
 
 import config = require('config');
@@ -11,13 +11,13 @@ export default class RaspberryModulescontroller {
   private rgbLed: RGBLed;
 
   private constructor() {
-    const dht22Pin : number = config.get<number>('raspmodules.dht22.pin');
+    const dht22Pin: number = config.get<number>('raspmodules.dht22.pin');
     this.dht22 = new DHT22(dht22Pin);
 
-    const dcMotorPin : number = config.get<number>('raspmodules.dcmotor.pin');
+    const dcMotorPin: number = config.get<number>('raspmodules.dcmotor.pin');
     this.dcMotor = new DCMotor(dcMotorPin);
 
-    const rgbLedPin : { red : number; green : number; blue : number } = {
+    const rgbLedPin: { red: number; green: number; blue: number } = {
       red: config.get<number>('raspmodules.rgbled.pinR'),
       green: config.get<number>('raspmodules.rgbled.pinG'),
       blue: config.get<number>('raspmodules.rgbled.pinB'),
@@ -34,8 +34,8 @@ export default class RaspberryModulescontroller {
   }
 
   public async getTempLecture(): Promise<{
-  temperature: number;
-  humidity: number;
+    temperature: number;
+    humidity: number;
   }> {
     return this.dht22.getLecture();
   }

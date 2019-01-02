@@ -1,4 +1,4 @@
-export class DCMotor {
+export default class DCMotor {
   private pin: number;
 
   constructor(pin) {
@@ -7,7 +7,7 @@ export class DCMotor {
 
   public async move(time: number): Promise<any> {
     return new Promise((res, rej) => {
-      console.log(`moving for ${time} secs`);
+      this.pin;
       res();
     });
   }
